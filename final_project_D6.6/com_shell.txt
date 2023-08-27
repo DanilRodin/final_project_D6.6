@@ -1,0 +1,49 @@
+
+u1=User.objects.create_user('Сергей')
+u2=User.objects.create_user('Андрей')
+
+a1=Author.objects.create(user=u1)
+a2=Author.objects.create(user=u2)
+
+c1=Category.objects.create(name='Спорт')
+c2=Category.objects.create(name='Природа')
+c3=Category.objects.create(name='Музыка')
+c4=Category.objects.create(name='Еда')
+
+p1=Post.objects.create(author=a1, post_type="PS", title='Здоровое питание', content='Здоровое питание - это такое питание, которое обеспечивает рост, оптимальноеразвитие, полноценную жизнедеятельность, способствует укреплению здоровья и профилактике неинфекционных заболеваний, включая диабет, болезни сердца, инсульт и рак.Здоровое питание на протяжении всей жизни - важнейший элемент сохранения и укрепления здоровья нынешних и будущих поколений, а также, непременное условие достижения активного долголетия.')
+ p2=Post.objects.create(author=a1, post_type="AR", title='йога на природе', content='Заниматься такими практиками, к сожалению, можно только летом, но и за этот период можно отлично перезагрузить организм. На улице уже потеплело, и многие спортсмены стали выбираться на тренировки на природу. Одна из интереснейших и душевных практик – это йога на свежем воздухе. Если вы очень любите медитации и посещаете групповые занятия йогой в фитнес-клубах, очень рекомендуем вам разнообразить тренировочный план практиками на природе. Почему? Сейчас расскажем.')
+ p3=Post.objects.create(author=a2, post_type="AR", title='музыка природы', content='Звуки, созданные природой, всегда действуют успокаивающе и вдохновляюще. Вспомните сколько написано картин художниками, придумано стихов и рассказов именно, когда творцы находились на природе. Прогуливаясь по лесу, собирая костянику или, сидя в беседке, на берегу реки. Пение птиц, дуновение ветра, шум бурной реки, падение шишек, шелест листьев всё это звуки нашей удивительной природы. В душе словно расцветают незабудки, а в желудке порхают бабочки, когда слышишь эти прекрасные звуки.')
+
+p1.post_category.add(c4)
+p1.save()
+p2.post_category.add(c1, с2)
+p1.save()
+p3.post_category.add(c2, c3)
+p1.save()
+
+com1=Comment.objects.create(post=p1, user=u1, text='Комментарий1')
+com2=Comment.objects.create(post=p2, user=u2, text='Комментарий2')
+com3=Comment.objects.create(post=p3, user=u1, text='Комментарий3')
+com4=Comment.objects.create(post=p3, user=u2, text='Комментарий4')
+
+p1.dislike()
+p2.like()
+p3.like()
+com1.like()
+com2.like()
+com3.like()
+com4.dislike()
+
+a1.update_raiting()
+a1.raiting()
+a2.update_raiting()
+a2.raiting()
+
+best_user=Author.objects.order_by('-tating').values('user__username','rating').first()
+best_user
+
+best_post=Post.objects.order_by('-rating').values('post_time', 'author__user__username', 'rating', 'title').first()
+best_post_preview=Post.objects.order_by('-rating').first()
+best_post
+best_post_preview.preview()
+
